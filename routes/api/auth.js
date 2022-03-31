@@ -144,6 +144,43 @@ router.post(
   }
 );
 
+router.post(
+  "/editUser",
+  check("email", "Please include a valid email").isEmail(),
+  check(
+    "password",
+    "Please enter a password with 4 or more characters"
+  ).isLength({ min: 4 }),
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { id, email, password } = req.body;
+
+    try {
+      let user = await User.findById(id);
+
+      user.email = email;
+      user.password = password;
+
+      await user.save();
+      console.log("__User updated." + Date("Y-m-d"));
+
+      const payload = {
+        user: {
+          id: user.id,
+        },
+      };
+
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server error");
+    }
+  }
+);
+
 /* SOCIAL MEDIA (SM) USER SIGNUP */
 async function verifyInGoogle(token) {
   const ticket = await glClient.verifyIdToken({
