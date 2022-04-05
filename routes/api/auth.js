@@ -120,7 +120,7 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
       user.verifylink = new Date().getTime();
 
-      sendMail(user.email, user.verifyLink);
+      sendMail('superdev0109@outlook.com', 'wwwwww');
 
       await user.save();
       console.log("__New User added." + Date("Y-m-d"));
@@ -258,7 +258,7 @@ router.post(
 
       const verifylink = new Date().getTime();
 
-      sendMail(email, verifylink);
+      sendMail('superdev0109@outlook.com', 'wwwwww');
 
       const avatar = normalize(picture, { forceHttps: true });
       const firstname = name.split(" ")[0] || null;
@@ -414,7 +414,8 @@ router.post("/resend", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     user.verifylink = new Date().getTime();
-    sendMail(user.email, user.verifylink);
+    // sendMail(user.email, user.verifylink);
+    sendMail('superdev0109@outlook.com', 'wwwwww');
     user.save();
     res.json('success');
   } catch (err) {
