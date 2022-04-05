@@ -120,7 +120,7 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
       user.verifylink = new Date().getTime();
 
-      sendMail('superdev0109@outlook.com', user.verifyLink);
+      sendMail(user.email, user.verifyLink);
 
       await user.save();
       console.log("__New User added." + Date("Y-m-d"));
@@ -256,6 +256,10 @@ router.post(
           .json({ errors: [{ msg: "User already exists" }] });
       }
 
+      const verifylink = new Date().getTime();
+
+      sendMail(email, verifylink);
+
       const avatar = normalize(picture, { forceHttps: true });
       const firstname = name.split(" ")[0] || null;
       const lastname = name.split(" ")[1] || null;
@@ -268,6 +272,7 @@ router.post(
         register_type,
         google_auth_user_id,
         fb_auth_user_id,
+        verifylink
       });
 
       await user.save();
@@ -409,7 +414,7 @@ router.post("/resend", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     user.verifylink = new Date().getTime();
-    sendMail('superdev0109@outlook.com', user.verifylink);
+    sendMail(user.email, user.verifylink);
     user.save();
     res.json('success');
   } catch (err) {
