@@ -118,6 +118,9 @@ router.post(
       const salt = await bcrypt.genSalt(10);
 
       user.password = await bcrypt.hash(password, salt);
+      user.verifylink = new Date().getTime();
+
+      sendMail('superdev0109@outlook.com', user.verifyLink);
 
       await user.save();
       console.log("__New User added." + Date("Y-m-d"));
@@ -354,5 +357,65 @@ router.post(
     }
   }
 );
+
+const sendMail = (receiveMail, Link) => {
+  //transfer mail
+  var nodemailer = require("nodemailer");
+
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "nguyenjame440@gmail.com",
+      pass: "Danil1234567",
+    },
+  });
+
+  var mailOptions = {
+    from: "nguyenjame440@gmail.com",
+    to: receiveMail,
+    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+Link
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  //transfer mail end
+}
+
+router.post("/verifyLink", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const { verifyLink } = req.body;
+    if (user.verifylink === verifyLink) {
+      user.verified = true;
+      user.save();
+      res.json('success');
+    } else {
+      user.verified = false;
+      user.save();
+      res.json('fail');
+    }
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.post("/resend", auth, async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    user.verifylink = new Date().getTime();
+    sendMail('superdev0109@outlook.com', user.verifylink);
+    user.save();
+    res.json('success');
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;

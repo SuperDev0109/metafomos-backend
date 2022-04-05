@@ -24,7 +24,9 @@ const UserSchema = new mongoose.Schema({
   follow3: {type: String, default: 0},
   follow4: {type: String, default: 0},
   follow5: {type: String, default: 0},
-  admin: {type: Boolean, default: false}
+  admin: {type: Boolean, default: false},
+  verifylink: {type: String},
+  verified: {type: Boolean, default: false}
 });
 
 module.exports = mongoose.model('user', UserSchema);
