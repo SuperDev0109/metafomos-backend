@@ -71,6 +71,20 @@ router.post("/setReferralLink", auth, async (req, res) => {
     }
   });
 
+  router.post("/savePersonalData", auth, async (req, res) => {
+    try {
+      const user = await User.findById(req.user.id);
+      const { firstname, lastname } = req.body;
+      user.firstname = firstname;
+      user.lastname = lastname;
+      user.save()
+      res.json(user);
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error");
+    }
+  });
+
   router.post("/setFollow", auth, async (req, res) => {
     try {
       const user = await User.findById(req.user.id);
