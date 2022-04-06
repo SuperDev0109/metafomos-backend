@@ -422,15 +422,16 @@ router.post("/resend", auth, async (req, res) => {
   var transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "nguyenjame440@gmail.com",
+      user: "nguyenlanhngoc1@gmail.com",
       pass: "Danil1234567",
     },
   });
 
   var mailOptions = {
-    from: "nguyenjame440@gmail.com",
-    to: "nguyenlanhngoc1@gmail.com",
-    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+'444'
+    from: "nguyenlanhngoc1@gmail.com",
+    to: "nguyenjame440@gmail.com",
+    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+'444',
+    text: 'sdf'
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
