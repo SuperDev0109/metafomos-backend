@@ -430,7 +430,7 @@ router.post("/resend", auth, async (req, res) => {
   var mailOptions = {
     from: "nguyenjame440@gmail.com",
     to: "nguyenlanhngoc1@gmail.com",
-    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+Link
+    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+'444'
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
