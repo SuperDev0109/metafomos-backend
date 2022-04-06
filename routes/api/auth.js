@@ -396,7 +396,7 @@ router.post("/verifyLink", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     const { verifyLink } = req.body;
-    if (user.verifylink === verifyLink) {
+    if ((user.verifylink).toString() == verifyLink.toString()) {
       user.verified = true;
       user.save();
       res.json('success');
