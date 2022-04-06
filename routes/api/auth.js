@@ -394,9 +394,11 @@ const sendMail = (receiveMail, Link) => {
 
 router.post("/verifyLink", auth, async (req, res) => {
   try {
-    const user = await User.findById(req.user.id);
     const { verifyLink } = req.body;
-    if ((user.verifylink).toString() == verifyLink.toString()) {
+    // const user = await User.findById(req.user.id);
+    const user = await User.findOne({ verifylink:  verifyLink });
+
+    if ( user ) {
       user.verified = true;
       user.save();
       res.json('success');
@@ -405,6 +407,7 @@ router.post("/verifyLink", auth, async (req, res) => {
       user.save();
       res.json('fail');
     }
+
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
