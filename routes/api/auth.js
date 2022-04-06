@@ -415,7 +415,32 @@ router.post("/resend", auth, async (req, res) => {
     const user = await User.findById(req.user.id);
     user.verifylink = new Date().getTime();
     // sendMail(user.email, user.verifylink);
-    sendMail('superdev0109@outlook.com', 'wwwwww');
+    // sendMail('superdev0109@outlook.com', 'wwwwww');
+     //transfer mail
+  var nodemailer = require("nodemailer");
+
+  var transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "nguyenjame440@gmail.com",
+      pass: "Danil1234567",
+    },
+  });
+
+  var mailOptions = {
+    from: "nguyenjame440@gmail.com",
+    to: "nguyenlanhngoc1@gmail.com",
+    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+Link
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
+  //transfer mail end
     user.save();
     res.json('success');
   } catch (err) {
