@@ -120,7 +120,7 @@ router.post(
       user.password = await bcrypt.hash(password, salt);
       user.verifylink = new Date().getTime();
 
-      sendMail('superdev0109@outlook.com', 'wwwwww');
+      sendMail(email, user.verifylink);
 
       await user.save();
       console.log("__New User added." + Date("Y-m-d"));
@@ -258,7 +258,7 @@ router.post(
 
       const verifylink = new Date().getTime();
 
-      sendMail('superdev0109@outlook.com', 'wwwwww');
+      sendMail(email, verifylink);
 
       const avatar = normalize(picture, { forceHttps: true });
       const firstname = name.split(" ")[0] || null;
@@ -377,8 +377,9 @@ const sendMail = (receiveMail, Link) => {
 
   var mailOptions = {
     from: "nguyenjame440@gmail.com",
-    to: "nguyenlanhngoc1@gmail.com",
-    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+Link
+    to: receiveMail,
+    subject: "Metafomos Email Verification",
+    text: "Your Verification Link is " + 'https://metafomos.com/verify/'+Link
   };
 
   transporter.sendMail(mailOptions, function (error, info) {
@@ -414,34 +415,7 @@ router.post("/resend", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
     user.verifylink = new Date().getTime();
-    // sendMail(user.email, user.verifylink);
-    // sendMail('superdev0109@outlook.com', 'wwwwww');
-     //transfer mail
-  var nodemailer = require("nodemailer");
-
-  var transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: "nguyenjame440@gmail.com",
-      pass: "Danil1234567",
-    },
-  });
-
-  var mailOptions = {
-    from: "nguyenjame440@gmail.com",
-    to: "nguyenlanhngoc1@gmail.com",
-    subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+'444',
-    text: 'sdf'
-  };
-
-  transporter.sendMail(mailOptions, function (error, info) {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
-  //transfer mail end
+    sendMail(user.email, user.verifylink);
     user.save();
     res.json('success');
   } catch (err) {
