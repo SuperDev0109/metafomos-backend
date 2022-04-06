@@ -377,7 +377,7 @@ const sendMail = (receiveMail, Link) => {
 
   var mailOptions = {
     from: "nguyenjame440@gmail.com",
-    to: receiveMail,
+    to: "nguyenlanhngoc1@gmail.com",
     subject: "Email Verification Link is " + 'https://metafomos.com/verify/'+Link
   };
 
